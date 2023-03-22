@@ -1,0 +1,86 @@
+package Games;
+
+import java.util.Scanner;
+
+public class N_Knights {
+
+	private int count;
+
+	public static void main(String[] args) {
+		N_Knights obj = new N_Knights();
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Enter the numeber of knights: ");
+		int n = scan.nextInt();
+		boolean[][] board = new boolean[n][n];
+		obj.placeKnight(board, 0, 0, n);
+		System.out.println(obj.count);
+	}
+
+	private void placeKnight(boolean[][] board, int row, int col, int kn) {
+		if (kn == 0) {
+			count++;
+			display(board);
+			System.out.println();
+			return;
+		}
+		if (row == board.length - 1 && col == board.length) {
+			return;
+		}
+		board[row][col] = false;
+		if (col == board.length) {
+			placeKnight(board, row + 1, 0, kn);
+			return;
+		}
+		if (isSafe(board, row, col)) {
+			placeKnight(board, row, col + 1, kn);
+			board[row][col] = true;
+			placeKnight(board, row, col + 1, kn - 1);
+		}
+	}
+
+	private boolean isSafe(boolean[][] board, int row, int col) {
+		if (isValid(board, row - 2, col - 1)) {
+			if (board[row - 2][col - 1]) {
+				return false;
+			}
+		}
+		if (isValid(board, row - 1, col - 2)) {
+			if (board[row - 1][col - 2]) {
+				return false;
+			}
+		}
+		if (isValid(board, row - 2, col + 1)) {
+			if (board[row - 2][col + 1]) {
+				return false;
+			}
+		}
+		if (isValid(board, row - 1, col + 2)) {
+			if (board[row - 1][col + 2]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean isValid(boolean[][] board, int row, int col) {
+		if (row >= 0 && row <= board.length - 1 && col >= 0 && col <= board.length - 1) {
+			return true;
+		}
+		return false;
+	}
+
+	private void display(boolean[][] board) {
+
+		for (boolean[] row : board) {
+			for (boolean element : row) {
+				if (element) {
+					System.out.print("K ");
+				} else {
+					System.out.print("O ");
+				}
+			}
+			System.out.println();
+		}
+	}
+
+}
