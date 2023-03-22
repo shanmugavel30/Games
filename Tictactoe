@@ -1,0 +1,181 @@
+
+package Games;
+
+import java.util.Scanner;
+
+public class Tictactoe {
+	private Scanner scan = new Scanner(System.in);
+	int[][] board = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+
+	public static void main(String[] args) {
+
+		Tictactoe obj = new Tictactoe();
+		obj.startGame();
+	}
+
+	public void startGame() {
+		printBoard();
+		int placementcount = 0;
+		while (true) {
+
+			while (true) {
+				if (placementcount == 9) {
+					System.out.println("!---Match Draw---!");
+					return;
+				}
+				System.out.println("Player1 turns:");
+				int p1 = scan.nextInt();
+				boolean safeRes1 = isSafe1(p1);
+
+				if (safeRes1) {
+					placementcount++;
+					boolean winres = checkWin1();
+					if (winres) {
+						printBoard();
+						System.out.println("!---Player1 won the match---!");
+						return;
+					}
+					printBoard();
+					break;
+				}
+			}
+			while (true) {
+				if (placementcount == 9) {
+					System.out.println("!---Match Draw---!");
+					return;
+				}
+				System.out.println("Player2 turns:");
+				int p2 = scan.nextInt();
+				boolean safeRes2 = isSafe2(p2);
+
+				if (safeRes2) {
+					placementcount++;
+					boolean winres = checkWin2();
+					if (winres) {
+						printBoard();
+						System.out.println("!---Player2 won the match---!");
+						return;
+					}
+					printBoard();
+					break;
+				}
+			}
+
+		}
+
+	}
+
+	private void printBoard() {
+		for (int i = 0; i < board.length; i++) {
+			System.out.println("* ---- * ---- * ---- *");
+			System.out.print("|");
+			for (int j = 0; j < board[i].length; j++) {
+				if (board[i][j] == -1) {
+					System.out.printf("  %2s  |", "X");
+				} else if (board[i][j] == 0) {
+					System.out.printf("  %2s  |", "O");
+				} else {
+					System.out.printf("  %2s  |", board[i][j]);
+				}
+			}
+			System.out.println();
+		}
+		System.out.println("* ---- * ---- * ---- *");
+	}
+
+	public boolean isSafe1(int p1) {
+		for (int i = 1; i < 10; i++) {
+
+			if (p1 == i) {
+				int index = p1 % 3, index1 = 0, index2 = 0;
+				if (index == 0) {
+					index2 = 2;
+				} else {
+					index2 = index - 1;
+				}
+				if (p1 % 3 != 0) {
+					index1 = p1 / 3;
+				} else {
+					index1 = p1 / 3 - 1;
+				}
+
+				if (board[index1][index2] == i) {
+					board[index1][index2] = -1;
+					return true;
+				}
+			}
+		}
+		return false;
+
+	}
+
+	public boolean isSafe2(int p2) {
+		for (int i = 1; i < 10; i++) {
+
+			if (p2 == i) {
+				int index = p2 % 3, index1 = 0, index2 = 0;
+				if (index == 0) {
+					index2 = 2;
+				} else {
+					index2 = index - 1;
+				}
+				if (p2 % 3 != 0) {
+					index1 = p2 / 3;
+				} else {
+					index1 = p2 / 3 - 1;
+				}
+
+				if (board[index1][index2] == i) {
+					board[index1][index2] = 0;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean checkWin2() {
+		if (board[0][0] == 0 && board[0][1] == 0 && board[0][2] == 0) {
+			return true;
+		} else if (board[0][0] == 0 && board[1][0] == 0 && board[2][0] == 0) {
+			return true;
+		} else if (board[0][0] == 0 && board[1][1] == 0 && board[2][2] == 0) {
+			return true;
+		} else if (board[1][0] == 0 && board[1][1] == 0 && board[1][2] == 0) {
+			return true;
+		} else if (board[0][1] == 0 && board[1][1] == 0 && board[2][1] == 0) {
+			return true;
+		} else if (board[0][2] == 0 && board[1][1] == 0 && board[2][0] == 0) {
+			return true;
+		} else if (board[0][2] == 0 && board[1][2] == 0 && board[2][2] == 0) {
+			return true;
+		} else if (board[2][0] == 0 && board[2][1] == 0 && board[2][2] == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean checkWin1() {
+		if (board[0][0] == -1 && board[0][1] == -1 && board[0][2] == -1) {
+			return true;
+		} else if (board[0][0] == -1 && board[1][0] == -1 && board[2][0] == -1) {
+			return true;
+		} else if (board[0][0] == -1 && board[1][1] == -1 && board[2][2] == -1) {
+			return true;
+		} else if (board[1][0] == -1 && board[1][1] == -1 && board[1][2] == -1) {
+			return true;
+		} else if (board[0][1] == -1 && board[1][1] == -1 && board[2][1] == -1) {
+			return true;
+		} else if (board[0][2] == -1 && board[1][1] == -1 && board[2][0] == -1) {
+			return true;
+		} else if (board[0][2] == -1 && board[1][2] == -1 && board[2][2] == -1) {
+			return true;
+		} else if (board[2][0] == -1 && board[2][1] == -1 && board[2][2] == -1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+}
