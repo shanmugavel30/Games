@@ -1,0 +1,163 @@
+
+package Games;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Random;
+
+public class SnakeLadder {
+
+	private static Map<Integer, Integer> snake = new HashMap<>();
+	private static Map<Integer, Integer> ladder = new HashMap<>();
+	private static int res = 0, res2 = 0;
+
+	public SnakeLadder(String[][] board) {
+		setBoard(board);
+		setSnake(board);
+		setLadder(board);
+	}
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		int n = 10;
+		String[][] board = new String[n][n];
+		SnakeLadder obj = new SnakeLadder(board);
+
+		obj.print(board);
+		System.out.println("Enter the number of players: ");
+		int count = scan.nextInt();
+		obj.startGame(board, count);
+	}
+
+	private void startGame(String[][] board, int count) {
+		Random r = new Random();
+		while (true) {
+			while (true) {
+
+				System.out.println("\n1st Player move: ");
+
+				int p1 = r.nextInt(1, 7);
+				System.out.println("the number is" + p1);
+				res += p1;
+				if (snake.containsKey(res)) {
+					res = snake.get(res);
+				}
+				if (ladder.containsKey(res)) {
+					res = ladder.get(res);
+				}
+
+				if (res == 100) {
+					print(board);
+					System.out.println("Player 1 win...!");
+					return;
+				} else if (res > 100) {
+					res -= p1;
+				}
+				print(board);
+				if (p1 < 4) {
+					break;
+				}
+			}
+
+			while (true) {
+
+				System.out.println("\n2nd Player move: ");
+
+				int p2 = r.nextInt(1, 7);
+				System.out.println("the number is" + p2);
+				res2 += p2;
+
+				if (snake.containsKey(res2)) {
+					res2 = snake.get(res2);
+				}
+				if (ladder.containsKey(res2)) {
+					res2 = ladder.get(res2);
+				}
+
+				if (res2 == 100) {
+					print(board);
+					System.out.println("Player 2 win...!");
+					return;
+				} else if (res2 > 100) {
+					res2 -= p2;
+				}
+				print(board);
+				if (p2 < 4) {
+					break;
+				}
+			}
+		}
+	}
+
+	private void setBoard(String[][] board) {
+		int point = 1;
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (i % 2 == 0 && j != board[i].length - 1) {
+					board[i][j] = String.valueOf(point);
+					point++;
+				} else if (j == board[i].length - 1) {
+					board[i][j] = String.valueOf(point);
+					point += 10;
+				} else {
+					board[i][j] = String.valueOf(point);
+					point--;
+				}
+			}
+		}
+	}
+
+	private void setLadder(String[][] board) {
+		ladder.put(7, 25);
+		ladder.put(12, 34);
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				try {
+					if ((!snake.containsKey(Integer.parseInt(board[i][j])))
+							&& ladder.containsKey(Integer.parseInt(board[i][j]))) {
+						board[i][j] = String.format("%7s",
+								String.format("L(%d)", ladder.get(Integer.parseInt(board[i][j]))));
+					}
+				} catch (NumberFormatException e) {
+
+				}
+			}
+		}
+
+	}
+
+	private void setSnake(String[][] board) {
+		snake.put(56, 34);
+		snake.put(77, 54);
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (snake.containsKey(Integer.parseInt(board[i][j]))) {
+					board[i][j] = String.format("%7s",
+							String.format("S(%d)", snake.get(Integer.parseInt(board[i][j]))));
+				}
+			}
+		}
+	}
+
+	private void print(String[][] board) {
+		for (int i = board.length - 1; i >= 0; i--) {
+			System.out.println("     ---------------------------------------------------------------------------------");
+			System.out.print("     |");
+			for (int j = 0; j <= board.length - 1; j++) {
+				
+				if (String.valueOf(res).equals(board[i][j])) {
+					System.out.printf("%6sP1|", board[i][j]);
+				} else if (String.valueOf(res2).equals(board[i][j])) {
+					System.out.printf("%6sP2|", board[i][j]);
+				} else {
+					System.out.printf("%7s|", board[i][j]);
+				}
+
+			}
+			System.out.println();
+		}
+		System.out.println("     ---------------------------------------------------------------------------------");
+	}
+
+}
